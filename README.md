@@ -14,7 +14,7 @@ Open up a terminal and type:
 git clone https://github.com/<username>/MonkeyMusicChallenge-Team-MusicMiners.git
 cd MonkeyMusicChallenge-Team-MusicMiners
 mvn package
-java -jar target/warmup.jar <your-team-name> <your-api-key> <game-id>
+<more coming soon>
 
 ## Disclaimer
 
