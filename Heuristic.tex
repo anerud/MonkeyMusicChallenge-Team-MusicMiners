@@ -31,7 +31,7 @@ P_k(i) &= p(i) + \sum\limits_{i'\in N_k(i)} p(i'),
 
 where $d(i,i')$ is the shortest distance between $i$ and $i'$ and $p(i)$ is the number of point that item $i$ gives. Now define the value of a user $u$ as:
 
-$$V(u) = \frac{1}{|I|} \sum\limits_{i \in I} \frac{d(u,i) + D_c(i)}{P_c(i)}$$
+$$V(u) = \min\limits_{i} \frac{d(u,i) + D_c(i)}{P_c(i)}$$
 
 The heuristic for the pair ($N_k(i), u$) is then defined as:
 
@@ -39,7 +39,11 @@ The heuristic for the pair ($N_k(i), u$) is then defined as:
 H(N_k(i),u) = \frac{d(m,i) + D_k(i) + d(i,u)}{P_k(i) + p(CI)} + V(u)
 \end{align*}
 
-were $p(CI)$ is the number of points the items in your inventory are worth. Then define:
+were $p(CI)$ is the number of points the items in your inventory are worth. Also, define the heuristic of the null neighbourhood ( equivalent to returning to the user immediately) $H^*_0$ as:
+
+$$H^*_0 = \min\limits_{u} \frac{d(m,u)}{p(CI)} + V(u)$$
+
+. Finally, define:
 
 $$H_k^* = \min\limits_{i,u} H(N_k(i),u)$$
 $$H^* = \min\limits_{k} H_k^*$$
