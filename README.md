@@ -17,7 +17,7 @@ cd MonkeyMusicChallenge-Team-MusicMiners
 
 mvn package
 
-java -jar target/MonkeyMusicChallenge-Team-MusicMiners.jar <your-team-name> <your-api-key> <game-id>"
+java -jar target/MonkeyMusicChallenge-Team-MusicMiners.jar your-team-name your-api-key game-id"
 
 Want to import into Eclipse? Run mvn eclipse:eclipse and then import into Eclipse.
 
