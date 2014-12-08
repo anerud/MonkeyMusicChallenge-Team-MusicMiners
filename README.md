@@ -20,9 +20,9 @@ Agent
 -----------
 The main idea behind the agent's AI is:
 
-1. Evaluate the neighbourhoods, of size 0 <= k <= #Slots left in inventory, around all items in the map in order to find the best neighbourhood. Details about this is found in "Heuristic.pdf".
+1. Evaluate the neighbourhoods, of size 0 <= k <= #Slots left in inventory, around all items in the map in order to find the best neighbourhood and return user. Details about this is found in "Heuristic.pdf".
 
-2. Given the best neighbourhood and return user, compute the Travelling Salesman Problem where one visist all nodes in the neighbourhood and return to the return user. The agent should then move according to the solution of the stated TSP.
+2. Given the best neighbourhood and return user, solve the Travelling Salesman Problem where one visist all nodes in the neighbourhood and return to the return user. The agent should then move according to the solution of the stated TSP.
 
 In order to achieve this all pairwise distances between items, users and the agent are computed as needed with the A* algorithm and stored in a hash map for easy accessing. Storing the shortest paths in a hash map will also prevent the agent from recomputing them when it doesn't have to be done.
 
@@ -43,7 +43,7 @@ The agent does not handle doors yet! However, this can easily be done by adding 
 
 ####Tunnels
 
-The tunnels are connected in the A* algorithm when computed the shortest path between to positions in the map.
+The tunnels are connected in the A* algorithm when computed the shortest path between two positions in the map.
 
 
 ####Bananas
