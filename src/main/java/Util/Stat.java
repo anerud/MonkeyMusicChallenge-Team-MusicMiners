@@ -8,10 +8,10 @@ import java.util.List;
  * This is a class for statistical calculations.
  */
 public class Stat<T extends Number> {
-	
+
 	private List<T> sample;
 	private double mean;
-	
+
 	/**
 	 * Creates a new and empty Stat object.
 	 */
@@ -19,11 +19,11 @@ public class Stat<T extends Number> {
 		sample = new ArrayList<T>();
 		mean = 0;
 	}
-	
+
 	public List<T> getSample(){
 		return sample;
 	}
-	
+
 	/**
 	 * Add and observation to the Stat sample
 	 * @param obs observation to add.
@@ -33,15 +33,15 @@ public class Stat<T extends Number> {
 		double n = sample.size();
 		mean = ((mean)*(n-1)+obs.doubleValue())/n;
 	}
-	
+
 	public double getMean(){
 		return mean;
 	}
-	
+
 	public int getSampleSize(){
 		return sample.size();
 	}
-	
+
 	public double getSampleVariance(){
 		double n = sample.size();
 		if(n<=1){
@@ -53,7 +53,7 @@ public class Stat<T extends Number> {
 		}
 		return sum/(n-1.0);
 	}
-	
+
 	/**
 	 * Calculates the mean of a sample
 	 * @param sample the sample to calculate the mean of
@@ -70,7 +70,7 @@ public class Stat<T extends Number> {
 		}
 		return ((double)sum)/((double)sampleSize);
 	}
-	
+
 	/**
 	 * Calculates the sample variance (s^2) of a sample
 	 * @param sample the sample to calculate the sample variance of
@@ -93,7 +93,7 @@ public class Stat<T extends Number> {
 	public String toString(){
 		return "mean = " + roundNDecimals(this.mean, 3) + " | std = " + roundNDecimals(this.getSampleVariance(), 3);
 	}
-	
+
 	public static double roundNDecimals(double d, int N) {
 		double factor = Math.pow(10, N);
 		double result = d * factor;
@@ -101,7 +101,7 @@ public class Stat<T extends Number> {
 		result = result / factor;
 		return result;
 	}
-	
+
 	public double getMean(List<Stat<T>> statList) {
 		double result = 0;
 		for(Stat<T> t : statList) {
@@ -109,5 +109,5 @@ public class Stat<T extends Number> {
 		}
 		return result / ((double) statList.size());
 	}
-	
+
 }

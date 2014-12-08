@@ -12,7 +12,7 @@ import environment.GameState;
 import environment.Tunnel;
 
 public class BoardState implements IAStarState {
-	
+
 	private static Set<Position> visitedStates;
 	private static HashMap<PositionTuple,Double> heuristicMap;
 	private GameState gs;
@@ -20,7 +20,7 @@ public class BoardState implements IAStarState {
 	private Position goalPos;
 	private List<String> actionsToGetHere;
 	private final String[] directions = {"right","down","left","up"};
-	
+
 	public BoardState(
 			final GameState gameState, 
 			final Position currentPos, 
@@ -35,7 +35,7 @@ public class BoardState implements IAStarState {
 		BoardState.visitedStates = visitedStates;
 		BoardState.heuristicMap = heuristicMap;
 	}
-	
+
 	public BoardState(
 			final GameState gameState, 
 			final Position currentPos, 
@@ -94,12 +94,12 @@ public class BoardState implements IAStarState {
 			heuristic = heuristicMap.get(pt);
 		} else {
 			heuristic = currentPos.distanceTo(goalPos);
-			
+
 			//TODO: Take tunnels into account
 			// For all pairs of tunnels check 
 			// manhattan distance if one would first 
 			// go to t1 then appear out of t2 and then go to goal
-			
+
 			//THIS TAKES ALOT OF TIME!!! (TODO: See if one can do it faster)
 			for(Tunnel t1 : gs.tunnels.values()) {
 				Tunnel t2 = gs.getTwinTunnel(t1);
@@ -111,16 +111,16 @@ public class BoardState implements IAStarState {
 			}
 			heuristicMap.put(pt, heuristic);
 		}
-		
+
 		return actionsToGetHere.size() + heuristic;
-			   
+
 	}
 
 	@Override
 	public boolean hasReachedGoal() {
 		return posIsGoal(currentPos);
 	}
-	
+
 	private boolean posIsGoal(Position pos){
 		return pos.equals(goalPos);
 	}
@@ -129,21 +129,21 @@ public class BoardState implements IAStarState {
 	public List<String> getActionsToGetHere() {
 		return actionsToGetHere;
 	}
-	
+
 	public void setActionsToGetHere(List<String> path) {
 		actionsToGetHere = path;
 	}
-	
+
 	public Position getCurrentPos(){
 		return currentPos;
 	}
-	
+
 	public static Set<Position> getVisitedStates(){
 		return visitedStates;
 	}
-	
+
 	public static HashMap<PositionTuple, Double> getHeuristicMap(){
 		return heuristicMap;
 	}
-	
+
 }

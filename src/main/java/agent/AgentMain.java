@@ -16,23 +16,23 @@ import com.mashape.unirest.http.Unirest;
 // Hi! Welcome to the Monkey Music Challenge Java starter kit!
 
 public class AgentMain {
-	
-    private static String gameId;
 
-    // You control your monkey by sending POST requests to the Monkey Music server
+	private static String gameId;
+
+	// You control your monkey by sending POST requests to the Monkey Music server
 	private static final String GAME_URL = "http://competition.monkeymusicchallenge.com/game";
 
 	public static void main(final String[] args) {
 
-        try {
-            BufferedReader br = new BufferedReader(new FileReader("gameId.txt"));
-            gameId = br.readLine();
-            br.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("gameId.txt"));
+			gameId = br.readLine();
+			br.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 
 		// Don't forget to provide the right command line arguments
@@ -88,7 +88,7 @@ public class AgentMain {
 			System.out.println("Server responded in: " + (System.currentTimeMillis() - t2));
 			// After sending your command, you'll get the new game state back
 			// and we go back up the loop to calculate our next move.
-			
+
 			System.out.println("");
 			System.out.println("--------------------------------------------------------------");
 		}
@@ -122,5 +122,5 @@ public class AgentMain {
 			throw new AssertionError(); // unreachable
 		}
 	}
-	
+
 }

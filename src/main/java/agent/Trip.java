@@ -7,11 +7,11 @@ import Util.Position;
 import Util.Util;
 
 public class Trip implements Comparable<Trip>{
-	
+
 	public ArrayList<Position> trip;
 	public ArrayList<String> tripActions;
 	public double tripValue;
-	
+
 	public Trip() {
 		trip = new ArrayList<Position>();
 		tripActions = new ArrayList<String>();
@@ -22,7 +22,7 @@ public class Trip implements Comparable<Trip>{
 	public int compareTo(Trip t) {
 		return Double.compare(t.tripValue,this.tripValue);
 	}
-	
+
 	public double nPointsOnTrip(GameState gs){
 		double nPoints = 0;
 		for(Position p : trip) {

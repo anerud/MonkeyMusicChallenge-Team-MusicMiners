@@ -12,19 +12,19 @@ import Util.Position;
 import Util.Util;
 
 public class GameState {
-	
+
 	public GameState lastGameState;
 	public Position agentPos;
 	public Position enemyPos;
 	public String[][] gameTiles;
 
 	public List<Item> items;
-    public List<Position> bananas;
-    public List<Position> openDoors;
-    public List<Position> closedDoors;
-    public List<Position> levers;
+	public List<Position> bananas;
+	public List<Position> openDoors;
+	public List<Position> closedDoors;
+	public List<Position> levers;
 
-    public List<Position> users;
+	public List<Position> users;
 	public HashMap<Position,Tunnel> tunnels;
 	public HashMap<Tunnel,Tunnel> twinTunnels;
 	public int nRows;
@@ -33,14 +33,14 @@ public class GameState {
 	public ArrayList<Buff> buffs;
 	public ArrayList<String> inventory;
 	public int inventorySize;
-    public static boolean itemsTraversable = true;
-	
+	public static boolean itemsTraversable = true;
+
 	public GameState(JSONObject gameState, GameState lastGameState) {
 
 		// Agent's position
 		this.lastGameState = lastGameState;
 		agentPos = new Position(gameState.getJSONArray("position").getInt(0), 
-								gameState.getJSONArray("position").getInt(1));
+				gameState.getJSONArray("position").getInt(1));
 		// The game board and enemy position
 		JSONArray layout = gameState.getJSONArray("layout");
 		nRows = layout.length();
@@ -51,53 +51,53 @@ public class GameState {
 		bananas = new ArrayList<Position>();
 		tunnels = new HashMap<Position,Tunnel>();
 		twinTunnels = new HashMap<Tunnel,Tunnel>();
-        openDoors = new ArrayList<>();
-        closedDoors = new ArrayList<>();
-        levers = new ArrayList<>();
+		openDoors = new ArrayList<>();
+		closedDoors = new ArrayList<>();
+		levers = new ArrayList<>();
 		Position p = new Position(0,0);
 		for (int y = 0; y < nRows; y++) {
 			for (int x = 0; x < nCols; x++) {
 				gameTiles[y][x] = layout.getJSONArray(y).getString(x);
 				p.setX(x); p.setY(y);
-				
+
 				// All items in a list
 				if(isItem(gameTiles[y][x])) {
 					items.add(new Item(new Position(y,x),agentPos,gameTiles[y][x]));
 				}
-				
+
 				// All users in a list
 				if(gameTiles[y][x].equals("user")) {
 					users.add(new Position(y,x));
 				}
-				
+
 				// Add all bananas to a list
 				if(gameTiles[y][x].equals("banana")) {
 					bananas.add(new Position(y, x));
 				}
-				
+
 				//Check if enemy position
 				if(gameTiles[y][x].equals("monkey") && !agentPos.equals(p)) {
 					enemyPos = new Position(y,x);
 				}
 
-                //Open Doors
-                if(gameTiles[y][x].equals("open-door")) {
-                    openDoors.add(new Position(y,x));
-                }
+				//Open Doors
+				if(gameTiles[y][x].equals("open-door")) {
+					openDoors.add(new Position(y,x));
+				}
 
-                //Closed Doors
-                if(gameTiles[y][x].equals("closed-door")) {
-                    closedDoors.add(new Position(y,x));
-                }
+				//Closed Doors
+				if(gameTiles[y][x].equals("closed-door")) {
+					closedDoors.add(new Position(y,x));
+				}
 
-                //TODO
-                //Levers
-                if(gameTiles[y][x].equals("lever")) {
-                    levers.add(new Position(y,x));
-                }
-                
-                //TODO
-                //Tunnels
+				//TODO
+				//Levers
+				if(gameTiles[y][x].equals("lever")) {
+					levers.add(new Position(y,x));
+				}
+
+				//TODO
+				//Tunnels
 				if(lastGameState == null) {
 					if(gameTiles[y][x].startsWith("tunnel")) {
 						// The form of a tunnel string is "tunnel-x" where x is the id
@@ -110,7 +110,7 @@ public class GameState {
 				}
 			}
 		}
-		
+
 		// figure out twin tunnels
 		if(lastGameState == null) {
 			Tunnel[] T = new Tunnel[tunnels.values().size()];
@@ -126,13 +126,13 @@ public class GameState {
 				}
 			}
 		}
-//		Collections.sort(items);
-//		items = items.subList(0, Math.min(40, items.size()));
-//		System.out.println("nItems: " + items.size());
-		
+		//		Collections.sort(items);
+		//		items = items.subList(0, Math.min(40, items.size()));
+		//		System.out.println("nItems: " + items.size());
+
 		// number of turns left
 		nTurnsLeft = gameState.getInt("remainingTurns");
-		
+
 		// Buffs
 		buffs = new ArrayList<Buff>();
 		JSONObject JSONBuff = gameState.getJSONObject("buffs");
@@ -142,10 +142,10 @@ public class GameState {
 			int duration = JSONBuff.getInt(buffName);
 			buffs.add(new Buff(buffName, duration));
 		}
-		
+
 		// Inventory size
 		inventorySize = gameState.getInt("inventorySize");
-		
+
 		// Inventory
 		inventory = new ArrayList<String>();
 		int nInv = gameState.getJSONArray("inventory").length();
@@ -154,36 +154,36 @@ public class GameState {
 		}
 	}
 
-    public boolean traversableItemsChanged(){
-        if(lastGameState.items.equals(this.items) && lastGameState.bananas.equals(this.bananas) &&
-                lastGameState.openDoors.equals(this.openDoors)){
-            return true;
-        }
-        return false;
-    }
+	public boolean traversableItemsChanged(){
+		if(lastGameState.items.equals(this.items) && lastGameState.bananas.equals(this.bananas) &&
+				lastGameState.openDoors.equals(this.openDoors)){
+			return true;
+		}
+		return false;
+	}
 
-    public boolean isTraversableTile(Position p) {
-//    	if(isInventoryFull() && p.equals(enemyPos)){
-//    		return false;
-//    	}
-    	
-    	String tile = gameTiles[p.getY()][p.getX()];
-        if(itemsTraversable){
-            return tile.equals("empty") ||
-                    tile.equals("monkey") ||
-                    tile.equals("playlist") ||
-                    tile.equals("song") ||
-                    tile.equals("album") ||
-                    tile.equals("banana") ||
-                    tile.equals("trap") ||
-                    tile.equals("open-door") ||
-                    tile.startsWith("tunnel");
-        }
-        return tile.equals("empty") ||
-                tile.equals("monkey") ||
-                tile.equals("open-door") ||
-                tile.startsWith("tunnel");
-    }
+	public boolean isTraversableTile(Position p) {
+		//    	if(isInventoryFull() && p.equals(enemyPos)){
+		//    		return false;
+		//    	}
+
+		String tile = gameTiles[p.getY()][p.getX()];
+		if(itemsTraversable){
+			return tile.equals("empty") ||
+					tile.equals("monkey") ||
+					tile.equals("playlist") ||
+					tile.equals("song") ||
+					tile.equals("album") ||
+					tile.equals("banana") ||
+					tile.equals("trap") ||
+					tile.equals("open-door") ||
+					tile.startsWith("tunnel");
+		}
+		return tile.equals("empty") ||
+				tile.equals("monkey") ||
+				tile.equals("open-door") ||
+				tile.startsWith("tunnel");
+	}
 
 	public Tunnel createTunnel(Position p) {
 		Tunnel t = tunnelAtPos(p);
@@ -211,7 +211,7 @@ public class GameState {
 		}
 		return t;
 	}
-	
+
 	@Override
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
@@ -220,7 +220,7 @@ public class GameState {
 		sb.append("nRows = " + nRows + "\n");
 		sb.append("nCols = " + nCols + "\n");
 		sb.append("nTurnsLeft = " + nTurnsLeft + "\n");
-		
+
 		sb.append("buffs = [");
 		for(int i = 0; i < buffs.size(); i++) {
 			sb.append("\n\t{");
@@ -233,9 +233,9 @@ public class GameState {
 			}
 		}
 		sb.append("]\n");
-		
+
 		sb.append("inventorySize = " + inventorySize + "\n");
-		
+
 		sb.append("inventory = [");
 		for(int i = 0; i < inventory.size(); i++) {
 			sb.append("\n\t\"");
@@ -250,23 +250,23 @@ public class GameState {
 		sb.append("]");
 		return sb.toString();
 	}
-	
+
 	public String tileOf(Position p){
 		return gameTiles[p.getY()][p.getX()];
 	}
-	
+
 	public boolean isInventoryFull(){
 		return (inventorySize-inventory.size() <= 0);
 	}
 
-    public boolean isInventoryEmpty(){
-        return inventory.size() == 0;
-    }
+	public boolean isInventoryEmpty(){
+		return inventory.size() == 0;
+	}
 
 	public Tunnel getTwinTunnel(Tunnel t1) {
 		return twinTunnels.get(t1);
 	}
-	
+
 	public Tunnel tunnelAtPos(Position p) {
 		return tunnels.get(p);
 	}
@@ -274,11 +274,11 @@ public class GameState {
 	public boolean isTunnelAtPos(Position p) {
 		return tunnelAtPos(p) != null;
 	}
-	
+
 	public int slotsLeftInInventory() {
 		return inventorySize - inventory.size();
 	}
-	
+
 	public boolean containsBuff(String buffName) {
 		Buff b;
 		for(int i = 0; i < buffs.size(); i++) {
@@ -289,7 +289,7 @@ public class GameState {
 		}
 		return false;
 	}
-	
+
 	public double numberOfPointsOfPosition(Position p) {
 		String tile = tileOf(p);
 		if(tile.equals("user")) {
@@ -302,7 +302,7 @@ public class GameState {
 			return numberOfPointsOfTile(tile, false);
 		}
 	}
-	
+
 	public double numberOfPointsOfTile(String tile, boolean onlyPointsForMusic) {
 		if(tile.equals("song")) {
 			return 1;
@@ -321,18 +321,18 @@ public class GameState {
 
 	public boolean isItem(String tile) {
 		return tile.equals("song") ||
-			   tile.equals("album") ||
-			   tile.equals("playlist") ||
-               tile.equals("trap");
+				tile.equals("album") ||
+				tile.equals("playlist") ||
+				tile.equals("trap");
 	}
 
-    public double inventoryValue() {
-        double value = 0;
-        for(String item :inventory){
-            value += numberOfPointsOfTile(item, true);
-        }
-        return value;
-    }
+	public double inventoryValue() {
+		double value = 0;
+		for(String item :inventory){
+			value += numberOfPointsOfTile(item, true);
+		}
+		return value;
+	}
 
 	public int tightnessOfPos(Position p) {
 		int tightness = 0;
@@ -356,7 +356,7 @@ public class GameState {
 	public boolean isOnBoard(Position p) {
 		return (p.getY() >= 0 && p.getY() < nRows) && (p.getX() >= 0 && p.getX() < nCols);
 	}
-	
+
 	public boolean inventoryContainsBanana(){
 		for(int i = 0; i < inventory.size(); i++) {
 			if(inventory.get(i).equals("banana")) {
@@ -365,7 +365,7 @@ public class GameState {
 		}
 		return false;
 	}
-	
+
 	public boolean inventoryContainsTrap() {
 		for(int i = 0; i < inventory.size(); i++) {
 			if(inventory.get(i).equals("trap")) {

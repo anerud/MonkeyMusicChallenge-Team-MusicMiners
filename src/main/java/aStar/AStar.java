@@ -6,22 +6,22 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 public class AStar {
-	
+
 	private PriorityQueue<IAStarState> q;
 	private IAStarState currentState;
-    public int nStatesChecked;
-    public int nStatesAddedToQ;
-    public long totalTime;
-    
+	public int nStatesChecked;
+	public int nStatesAddedToQ;
+	public long totalTime;
 
 
-    /**
+
+	/**
 	 * Creates an AStar object with an empty priority queue
 	 */
 	public AStar() {
 		q = new PriorityQueue<IAStarState>();
 	}
-	
+
 	/**
 	 * Creates an AStar object with a starting point.
 	 * @param startingPoint
@@ -30,15 +30,15 @@ public class AStar {
 		q = new PriorityQueue<>();
 		q.add(startingPoint);
 	}
-	
+
 	public void resetToStartState(IAStarState startingPoint){
 		q = new PriorityQueue<>();
 		q.add(startingPoint);
 		nStatesChecked = 0;
-	    nStatesAddedToQ = 0;
-	    totalTime = 0;
+		nStatesAddedToQ = 0;
+		totalTime = 0;
 	}
-	
+
 	/**
 	 * Runs the aStar algorithm until the goal is reached or
 	 * until the search space is explored.
@@ -50,15 +50,15 @@ public class AStar {
 			currentState = q.poll();
 			return;
 		}
-        long startTime;
-        long endTime = 0;
-        long timeDiff = 0;
-        totalTime = 0;
+		long startTime;
+		long endTime = 0;
+		long timeDiff = 0;
+		totalTime = 0;
 		do {
-            startTime = System.currentTimeMillis();
+			startTime = System.currentTimeMillis();
 			currentState = q.poll();
-			
-            Collection<? extends IAStarState> neighbours = new LinkedList<IAStarState>();
+
+			Collection<? extends IAStarState> neighbours = new LinkedList<IAStarState>();
 			try {
 				neighbours = currentState.expand();
 			} catch (CloneNotSupportedException e) {
@@ -72,28 +72,28 @@ public class AStar {
 			}
 			//Check neighbours for goalState
 			q.addAll(neighbours);
-			
-            endTime = System.currentTimeMillis();
-            timeDiff = endTime - startTime;
-            totalTime += timeDiff;
 
-            nStatesChecked++;
-            nStatesAddedToQ += neighbours.size();
+			endTime = System.currentTimeMillis();
+			timeDiff = endTime - startTime;
+			totalTime += timeDiff;
+
+			nStatesChecked++;
+			nStatesAddedToQ += neighbours.size();
 
 		} while (!q.isEmpty());
 	}
-	
+
 	public boolean hasReachedGoal() {
 		return currentState.hasReachedGoal();
 	}
-	
+
 	/**
 	 * @return the current state
 	 */
 	public IAStarState getCurrentState(){
 		return currentState;
 	}
-	
+
 	public List<String> getActionsToGoal(){
 		return currentState.getActionsToGetHere();
 	}

@@ -26,32 +26,32 @@ import aStar.BoardState;
 import aStar.IAStarState;
 
 public class AgentHClust {
-	
+
 	private File logFile;
 
 	private GameState gs = null;
 	private Map<String, Object> nextCommand;
-	
+
 	private HashMap<PositionTuple,IAStarState> alreadyComputedAStar = new HashMap<PositionTuple,IAStarState>();
-	
+
 	public Map<String, Object> move(final JSONObject gameState) throws NoSuchMethodExcetion {
 
 		gs = new GameState(gameState, gs);
-		
+
 		// Next command object
 		nextCommand = new HashMap<String, Object>();
-		
+
 		// Try to use banana if possible
 		if(useBanana()){
 			nextCommand.put("command", "use");
 			nextCommand.put("item", "banana");
 			return nextCommand;
 		}
-		
+
 		long t1 = System.currentTimeMillis();
 		double[][] distances = computeDistances();
 		HClust hc = new HClust(distances);
-		
+
 		Cluster c = hc.earlyStopCluster("average", gs.inventorySize - gs.inventory.size());
 		System.out.println("Time: " + (System.currentTimeMillis() - t1));
 		StringBuilder cString = new StringBuilder();
@@ -60,9 +60,9 @@ public class AgentHClust {
 			cString.append(item.itemName + " at pos " + item.p + " ");
 		}
 		System.out.println(cString);
-		
+
 		int[] perm = getBestPermutation(c.nodes, gs.inventorySize - gs.inventory.size());
-		
+
 		System.out.println("Best order:");
 		cString = new StringBuilder();
 		for(int i : perm) {
@@ -70,26 +70,26 @@ public class AgentHClust {
 			cString.append(item.itemName + " at pos " + item.p + " ");
 		}
 		System.out.println(cString);
-		
-//		Cluster[] clusterOrder = hc.cluster("average");
-//		System.out.println("Time: " + (System.currentTimeMillis() - t1));
-//		
-//		saveDendrogramToFile(hc.getDendrogram());
-//		saveDistances(distances);
-//		
-//		for(Cluster c : clusterOrder) {
-//			StringBuilder cString = new StringBuilder();
-//			Collections.sort(c.nodes);
-//			for(int i : c.nodes) {
-//				Item item = gs.items.get(i);
-//				cString.append(item.itemName + " at pos " + item.p + " ");
-//			}
-//			System.out.println(cString);
-//		}
-		
+
+		//		Cluster[] clusterOrder = hc.cluster("average");
+		//		System.out.println("Time: " + (System.currentTimeMillis() - t1));
+		//		
+		//		saveDendrogramToFile(hc.getDendrogram());
+		//		saveDistances(distances);
+		//		
+		//		for(Cluster c : clusterOrder) {
+		//			StringBuilder cString = new StringBuilder();
+		//			Collections.sort(c.nodes);
+		//			for(int i : c.nodes) {
+		//				Item item = gs.items.get(i);
+		//				cString.append(item.itemName + " at pos " + item.p + " ");
+		//			}
+		//			System.out.println(cString);
+		//		}
+
 		// Construct next command
 		nextCommand.put("command", "move");
-		
+
 		Item nextItem = gs.items.get(c.nodes.get(perm[0]));
 		List<String> nextActions = getActionsToItem(nextItem);
 		if(gs.containsBuff("speedy") && nextActions.size() >= 2) {
@@ -152,9 +152,9 @@ public class AgentHClust {
 			for(int i2 = i1+1; i2 < gs.items.size(); i2++){
 				dist = distanceBetweenPositions(gs.items.get(i1).p,gs.items.get(i2).p);
 				double nPoints = gs.numberOfPointsOfPosition(gs.items.get(i1).p) + 
-								 gs.numberOfPointsOfPosition(gs.items.get(i2).p);
+						gs.numberOfPointsOfPosition(gs.items.get(i2).p);
 				dist = Math.min((ad[i1] + dist)/nPoints,
-								(ad[i2] + dist)/nPoints);
+						(ad[i2] + dist)/nPoints);
 				d[i1][i2] = dist;
 				d[i2][i1] = dist;
 			}
@@ -170,15 +170,15 @@ public class AgentHClust {
 		}
 		return false;
 	}
-	
+
 	private double distanceBetweenPositions(Position p1, Position p2){
 		IAStarState goalState = null;
 		PositionTuple startGoalTuple = new PositionTuple(p1,p2);
-		
+
 		// If distance is not precomputed, then compute 
 		if(!alreadyComputedAStar.containsKey(startGoalTuple)) {
 			IAStarState startingState = new BoardState(gs,p1,p2,new LinkedList<String>(),
-						new HashSet<Position>(), new HashMap<PositionTuple, Double>());
+					new HashSet<Position>(), new HashMap<PositionTuple, Double>());
 			AStar aStar = new AStar(startingState);
 			aStar.run();
 			goalState = aStar.getCurrentState();
@@ -193,7 +193,7 @@ public class AgentHClust {
 		} else {
 			goalState = alreadyComputedAStar.get(startGoalTuple);
 		}
-		
+
 		// If the goal is reachable set distance to path length, else infinity
 		double distance = Double.POSITIVE_INFINITY;
 		if(goalState.hasReachedGoal()) {
@@ -201,7 +201,7 @@ public class AgentHClust {
 		}
 		return distance;
 	}
-	
+
 	private void saveDendrogramToFile(double[][] dendrogram) {
 		FileWriter fw;
 		BufferedWriter bw;
@@ -222,7 +222,7 @@ public class AgentHClust {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void saveDistances(double[][] d) {
 		FileWriter fw;
 		BufferedWriter bw;
@@ -246,34 +246,34 @@ public class AgentHClust {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void log(){
 		// Logging starts here {
-				FileWriter fw;
-				BufferedWriter bw;
-				try {
-					if(logFile == null) {
-						logFile = new File("log.txt");
-						if(logFile.exists()){
-							logFile.delete();
-						}
-						logFile.createNewFile();
-						fw = new FileWriter(logFile, true);
-						bw = new BufferedWriter(fw);
-						bw.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
-						bw.write("%%%%%%%%%%%%%%%%% NEW GAME %%%%%%%%%%%%%%%%%\n");
-						bw.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n\n");
-					} else {
-						logFile = new File("log.txt");
-						fw = new FileWriter(logFile, true);
-						bw = new BufferedWriter(fw);
-					}
-					bw.write("Command sent = " + nextCommand +"\n");
-					bw.write("\n\n\n");
-					bw.close();
-				} catch (IOException e) {
-					e.printStackTrace();
+		FileWriter fw;
+		BufferedWriter bw;
+		try {
+			if(logFile == null) {
+				logFile = new File("log.txt");
+				if(logFile.exists()){
+					logFile.delete();
 				}
-				// } Logging ends here
+				logFile.createNewFile();
+				fw = new FileWriter(logFile, true);
+				bw = new BufferedWriter(fw);
+				bw.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
+				bw.write("%%%%%%%%%%%%%%%%% NEW GAME %%%%%%%%%%%%%%%%%\n");
+				bw.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n\n");
+			} else {
+				logFile = new File("log.txt");
+				fw = new FileWriter(logFile, true);
+				bw = new BufferedWriter(fw);
+			}
+			bw.write("Command sent = " + nextCommand +"\n");
+			bw.write("\n\n\n");
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		// } Logging ends here
 	}
 }

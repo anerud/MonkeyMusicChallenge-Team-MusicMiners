@@ -38,25 +38,25 @@ public class Agent {
 	private GameState gs = null;
 	private Stat<Long> aStarTime = new Stat<Long>();
 	Trip minTrip;
-	
+
 	private int trackingMemorySize = 3;
 	private LinkedList<Position> trackingMemory = new LinkedList<Position>(); 
 	private int currentIndex = 0;
 	private HashMap<PositionTuple,IAStarState> alreadyComputedAStar = new HashMap<PositionTuple,IAStarState>();
-	
+
 	public Map<String, Object> move(final JSONObject gameState) {
 
 		gs = new GameState(gameState, gs);
-		
+
 		// Update tracking memory
 		trackingMemory.addLast(gs.enemyPos);
 		if(trackingMemory.size() > trackingMemorySize) {
 			trackingMemory.removeFirst();
 		}
-		
+
 		// Next command object
 		final Map<String, Object> nextCommand = new HashMap<String, Object>();
-		
+
 		// Try to use banana if possible
 		if(useBanana()){
 			nextCommand.put("command", "use");
@@ -64,53 +64,53 @@ public class Agent {
 			return nextCommand;
 		}
 
-//		int minDist = Integer.MAX_VALUE;
-//		Position minPos = new Position(-1, -1);
-//		List<String> minActions = new ArrayList<String>();
-//		String minTile = "";
-//		long totalTime = 0;
-//		for(int y = 0; y < gs.nRows; y++) {
-//			for(int x = 0; x < gs.nCols; x++) {
-//				boolean acceptedTile = false;
-//				String tile = gs.gameTiles[y][x];
-//				if(gs.inventory.size() < gs.inventorySize) {
-//					acceptedTile = Util.isValuable(tile);
-//				} else {
-//					acceptedTile = tile.equals("user");
-//				}
-//				if(acceptedTile) {
-//					IAStarState startingPoint = new BoardState(
-//							gs,
-//							gs.agentPos, 
-//							new Position(y,x), 
-//							new LinkedList<String>(),
-//							new HashSet<String>());
-//					AStar aStar = new AStar(startingPoint);
-//					aStar.run();
-//					totalTime += aStar.totalTime;
-//					if(aStar.hasReachedGoal()) {
-//						List<String> actions = aStar.getActionsToGoal();
-//						int distance = actions.size();
-//						if (distance < minDist) {
-//							minActions = actions;
-//							minDist = distance;
-//							minPos = new Position(y,x);
-//							minTile = tile;
-//						}
-//					}
-//				}
-//			}
-//		}
-		
-//		HashMap<Position,Double> enemyHeadings = predictEnemyMovement();
-//		for(Position p : enemyHeadings.keySet()) {
-//			System.out.println(tileOf(p) + " at " +p + ": " + enemyHeadings.get(p));
-//		}
-		
+		//		int minDist = Integer.MAX_VALUE;
+		//		Position minPos = new Position(-1, -1);
+		//		List<String> minActions = new ArrayList<String>();
+		//		String minTile = "";
+		//		long totalTime = 0;
+		//		for(int y = 0; y < gs.nRows; y++) {
+		//			for(int x = 0; x < gs.nCols; x++) {
+		//				boolean acceptedTile = false;
+		//				String tile = gs.gameTiles[y][x];
+		//				if(gs.inventory.size() < gs.inventorySize) {
+		//					acceptedTile = Util.isValuable(tile);
+		//				} else {
+		//					acceptedTile = tile.equals("user");
+		//				}
+		//				if(acceptedTile) {
+		//					IAStarState startingPoint = new BoardState(
+		//							gs,
+		//							gs.agentPos, 
+		//							new Position(y,x), 
+		//							new LinkedList<String>(),
+		//							new HashSet<String>());
+		//					AStar aStar = new AStar(startingPoint);
+		//					aStar.run();
+		//					totalTime += aStar.totalTime;
+		//					if(aStar.hasReachedGoal()) {
+		//						List<String> actions = aStar.getActionsToGoal();
+		//						int distance = actions.size();
+		//						if (distance < minDist) {
+		//							minActions = actions;
+		//							minDist = distance;
+		//							minPos = new Position(y,x);
+		//							minTile = tile;
+		//						}
+		//					}
+		//				}
+		//			}
+		//		}
+
+		//		HashMap<Position,Double> enemyHeadings = predictEnemyMovement();
+		//		for(Position p : enemyHeadings.keySet()) {
+		//			System.out.println(tileOf(p) + " at " +p + ": " + enemyHeadings.get(p));
+		//		}
+
 		long totalTime = System.currentTimeMillis();
 		Trip minTrip = getBestTrip(Math.min(gs.inventorySize-gs.inventory.size()+1,2));
 		totalTime = System.currentTimeMillis() - totalTime;
-		
+
 		// Construct next command
 		nextCommand.put("command", "move");
 		if(gs.containsBuff("speedy") && minTrip.tripActions.size() >= 2) {
@@ -166,7 +166,7 @@ public class Agent {
 		}
 		// } Logging ends here
 
-		
+
 		currentIndex = (currentIndex + 1)%trackingMemorySize;
 		return nextCommand;
 	}
@@ -186,7 +186,7 @@ public class Agent {
 		Position lastPos = null;
 		Position currentPos = null;
 		Iterator<Position> it = trackingMemory.iterator();
-		
+
 		//Build vector of enemy's movements
 		while(it.hasNext()) {
 			if(lastPos != null) {
@@ -200,7 +200,7 @@ public class Agent {
 				lastPos = it.next();
 			}
 		}
-		
+
 		// Define the probability proportional to nPoints*(PI-angle)/distance
 		double totalValue = 0;
 		for(int y = 0; y < gs.nRows; y++) {
@@ -223,46 +223,46 @@ public class Agent {
 						List<String> actions = aStar.getActionsToGoal();
 						distance = actions.size();
 					}
-					
+
 					double value = (Math.PI-angle)*gs.numberOfPointsOfTile(tile, false)/(distance*distance);
 					predictedProbabilities.put(new Position(y,x), value);
 					totalValue += value;
 				}
 			}
 		}
-		
+
 		for(Position p : predictedProbabilities.keySet()){
 			predictedProbabilities.put(p, predictedProbabilities.get(p)/totalValue);
 		}
-		
+
 		return predictedProbabilities;
 	}
-	
+
 	private Trip getBestTrip(int tripSize) {
 		ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<Trip> future = executor.submit(new BestTripComputer(tripSize));
+		Future<Trip> future = executor.submit(new BestTripComputer(tripSize));
 		try {
 			Trip minTrip = future.get(7000, TimeUnit.MILLISECONDS);
 			System.out.println("Returned in time!");
 			executor.shutdownNow();
 			return minTrip;
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-        	System.out.println("Interrupted");
-            return minTrip;
-        }
+		} catch (InterruptedException | ExecutionException | TimeoutException e) {
+			System.out.println("Interrupted");
+			return minTrip;
+		}
 
 	}
-	
+
 	private class BestTripComputer implements Callable<Trip> {
-		
+
 		int tripSize;
 		public BestTripComputer(int tripSize){
 			this.tripSize = tripSize;
 		}
-		
-	    @Override
-	    public Trip call() throws Exception {
-	    	int nItems = gs.items.size();
+
+		@Override
+		public Trip call() throws Exception {
+			int nItems = gs.items.size();
 			long combTime = System.currentTimeMillis();
 			List<int[]> combinations = Util.nPermuteK(nItems, tripSize);
 			combTime = System.currentTimeMillis() - combTime;
@@ -300,7 +300,7 @@ public class Agent {
 							alreadyComputedAStar.put(new PositionTuple(startGoalTuple), goalState);
 						}
 						nTimesAStar++;
-						
+
 					} else {
 						goalState = alreadyComputedAStar.get(startGoalTuple);
 					}
@@ -317,7 +317,7 @@ public class Agent {
 								trip.tripValue += gs.numberOfPointsOfPosition(goalPoint)/actionsToGoal.size();
 							}
 						}
-						
+
 					} else {
 						trip.tripValue = Double.NEGATIVE_INFINITY;
 						break;
@@ -334,6 +334,6 @@ public class Agent {
 			System.out.println("aStarTime: " + aStarTime);
 			System.out.println("looptime: " + loopTime);
 			return minTrip;
-	    }
+		}
 	}
 }

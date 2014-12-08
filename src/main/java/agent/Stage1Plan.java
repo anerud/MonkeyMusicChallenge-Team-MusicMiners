@@ -1,13 +1,13 @@
 package agent;
 
 public class Stage1Plan {
-	
+
 	int[] nHood;
 	int i;
 	int u;
 	int k;
 	double H;
-	
+
 	/**
 	 * A Plan in an early stage which states the nodes of the neighbourhood,
 	 * around item i, of size k and also what user u to return to.
@@ -24,7 +24,7 @@ public class Stage1Plan {
 		this.k = k;
 		this.H = H;
 	}
-	
+
 	/**
 	 * A null plan is defined as the neighbourhood of size 0 (returning to the user).
 	 * 

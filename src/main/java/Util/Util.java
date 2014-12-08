@@ -7,7 +7,7 @@ import environment.Buff;
 import environment.GameState;
 
 public class Util {
-	
+
 	/**
 	 * Puts Strings of separate plans together to one string of the entire plan
 	 * @param plan
@@ -20,7 +20,7 @@ public class Util {
 		}
 		return plan.toString();
 	}
-	
+
 	public static List<int[]> nPermuteK(int n, int k){
 		if(k > n) {
 			k = n;
@@ -31,7 +31,7 @@ public class Util {
 		}
 		return nPermuteKHelper(startPerm ,n,k);
 	}
-	
+
 	private static List<int[]> nPermuteKHelper(int[] perm ,int n, int kLeft){
 		List<int[]> perms = new ArrayList<int[]>();
 		if(kLeft <= 0) {
@@ -51,7 +51,7 @@ public class Util {
 		}
 		return perms;
 	}
-	
+
 	private static boolean permContains(int[] perm, int i) {
 		for(int j = 0; j < perm.length; j++) {
 			if(perm[j]==i) {
@@ -60,7 +60,7 @@ public class Util {
 		}
 		return false;
 	}
-	
+
 	public static List<String> reversePath(List<String> path) {
 		List<String> reversedPath = new ArrayList<String>();
 		for(int i = path.size()-1; i >= 0; i--) {

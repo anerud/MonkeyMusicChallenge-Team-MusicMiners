@@ -21,7 +21,7 @@ public interface IAStarState extends Comparable<IAStarState> {
 	 * @return a boolean if the current state is a goal state or not.
 	 */
 	public boolean hasReachedGoal();
-	
+
 	public List<String> getActionsToGetHere();
 
 }

@@ -1,10 +1,10 @@
 package Util;
 
 public class Position{
-	
+
 	private int x;
 	private int y;
-	
+
 	public Position(int y, int x){
 		this.y = y;
 		this.x = x;
@@ -23,17 +23,17 @@ public class Position{
 		}
 		return false;
 	}
-	
+
 	@Override
 	public String toString(){
 		return "(" + y + "," + x + ")";
 	}
-	
+
 	@Override
-    public int hashCode() {
-        return 13*x + 31*y;
-    }
-	
+	public int hashCode() {
+		return 13*x + 31*y;
+	}
+
 	public int getX() {
 		return x;
 	}
@@ -49,7 +49,7 @@ public class Position{
 	public void setY(int y) {
 		this.y = y;
 	}
-	
+
 	public int distanceTo(Position p) {
 		return Math.abs(this.x - p.x) + Math.abs(this.y - p.y);
 	}
