@@ -24,30 +24,30 @@ The main idea behind the agents AI is:
 In order to achieve this all pairwise distances between items, users and the agent are computed as needed with the A* algorithm and stored in a hash map for easy accessing. Storing the shortest paths in a hash map will also prevent the agent from recomputing them when it doesn't have to be done.
 
 
-Other key features of the include...
+### Other key features of the agent
 
-Tackling:
+####Tackling
 
 “Anger, fear, aggression; the dark side of the Force are they. Easily they flow, quick to join you in a fight. If once you start down the dark path, forever will it dominate your destiny, consume you it will, as it did Obi-Wan's apprentice." -Yoda
 
-Basically, tackling is the path to the dark side and should not be abused in our oponion, instead it should be used wisely! So the agent does not tackle unless his inventory is empty AND he is between his closest user and the enemy AND the enemy is really close.
+Basically, tackling is the first step down the path to the dark side and should not be abused in our oponion, instead it should be used wisely! So the agent does not tackle unless his inventory is empty AND he is between his closest user and the enemy AND the enemy is really close.
 
 
-Doors:
+####Doors
 
 The agent does not handle doors yet!
 
 
-Tunnels:
+####Tunnels
 
 The tunnels are connected in the A* algorithm when computed the shortest path between to positions in the map.
 
 
-Bananas:
+####Bananas
 
 For all bananas _b_ on the map, check if taking a detour around banana _b_ will decrease the total length of your plan (eating the banana will make the agent move twice per turn). If there are bananas that shortens the plan, take a detour around the currently closest banana _b*_that shortens the plan. The agent will use a banana if there is a banana in the inventory and the agent doesn't already have the speedy buff.
 
 
-Traps:
+####Traps
 
 In the agents perspective the traps are just as a song, album or playlist but worth 1.9 points. This means that an agent prefer picking up a trap over a song but an album over a trap. The agent's inventory is also limited to 1 trap. If the agent at any point happens to have a trap in the inventory AND (is in a tight space OR beside a user) the agent will place the trap.
