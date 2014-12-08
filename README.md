@@ -11,7 +11,7 @@ The GitHub for the challenge can be found at: https://github.com/monkey-music-ch
 
 Open up a terminal and type:
 
-"git clone https://github.com/<username>/MonkeyMusicChallenge-Team-MusicMiners.git
+"git clone https://github.com/your-username/MonkeyMusicChallenge-Team-MusicMiners.git
 
 cd MonkeyMusicChallenge-Team-MusicMiners
 
