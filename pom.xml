@@ -7,7 +7,7 @@
   <version>1.0-SNAPSHOT</version>
 
   <properties>
-    <mainClass>com.monkeymusicchallenge.warmup.Main</mainClass>
+    <mainClass>agent.AgentMain</mainClass>
   </properties>
 
   <dependencies>
@@ -20,7 +20,7 @@
 
   <!-- http://www.youtube.com/watch?v=kLO1djacsfg -->
   <build>
-    <finalName>warmup</finalName>
+    <finalName>MonkeyMusicChallenge-Team-MusicMiners</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

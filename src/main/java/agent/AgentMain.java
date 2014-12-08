@@ -24,20 +24,8 @@ public class AgentMain {
 
 	public static void main(final String[] args) {
 
-		try {
-			BufferedReader br = new BufferedReader(new FileReader("gameId.txt"));
-			gameId = br.readLine();
-			br.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-
 		// Don't forget to provide the right command line arguments
 		if (args.length < 3) {
-			System.out.println("Usage: java -jar target/monkey.jar <your-team-name> <your-api-key> <game-id>\n");
 			if (args.length < 1) {
 				System.out.println(" Missing argument: <your-team-name>");
 			}
@@ -45,15 +33,29 @@ public class AgentMain {
 				System.out.println(" Missing argument: <your-api-key>");
 			}
 			if (args.length < 3) {
-				System.out.println(" Missing argument: <game-id>");
+				try {
+					BufferedReader br = new BufferedReader(new FileReader("gameId.txt"));
+					gameId = br.readLine();
+					br.close();
+				} catch (FileNotFoundException e) {
+					System.out.println(" Missing argument: <game-id>");
+				} catch (IOException e) {
+					System.out.println(" Missing argument: <game-id>");
+				}
+				
 			}
-			System.exit(1);
+			if(gameId == null) {
+				System.out.println("Usage: java -jar target/monkey.jar <your-team-name> <your-api-key> <game-id>\n");
+				System.exit(1);
+			}
 		}
 
 		// You identify yourselves by your team name, your API key, and the current game ID
 		final String teamName = args[0];
 		final String apiKey = args[1];
-		//    final String gameId = args[2];
+		if(gameId == null){
+			gameId = args[2];
+		}
 
 		// We've put the AI-code in a separate class
 		final AgentNeighbourhoodHeuristic ai = new AgentNeighbourhoodHeuristic();

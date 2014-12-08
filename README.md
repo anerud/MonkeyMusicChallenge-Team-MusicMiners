@@ -1,5 +1,4 @@
-MonkeyMusicChallenge-Team-MusicMiners
-=====================================
+# MonkeyMusicChallenge-Team-MusicMiners
 
 This is the repository for the agent used in the Monkey Music Challenge by our team "MusicMiners" consisting of Sebastian Ånerud and Roland Hellström Keyte.
 
@@ -8,16 +7,24 @@ http://www.monkeymusicchallenge.com/
 
 The GitHub for the challenge can be found at: https://github.com/monkey-music-challenge/
 
+## Building and running the project
 
-Disclaimer
------------
+Open up a terminal and type:
+
+git clone https://github.com/<username>/MonkeyMusicChallenge-Team-MusicMiners.git
+cd MonkeyMusicChallenge-Team-MusicMiners
+mvn package
+java -jar target/warmup.jar <your-team-name> <your-api-key> <game-id>
+
+## Disclaimer
+
 The code was written under a tight time schedule and therefore the code might have a bad structure. The focus of this project was not to write beautiful code but to write an intelligent and efficient AI that runs as fast as possible.
 
 An example of less beatiful code in this project is the accessing of public fields instead of using getters and setters. This was done purely for convenience and is not a habit.
 
 
-Agent
------------
+## Agent
+
 The main idea behind the agent's AI is:
 
 1. Evaluate the neighbourhoods, of size 0 <= k <= #Slots left in inventory, around all items in the map in order to find the best neighbourhood and return user. Details about this is found in "Heuristic.pdf".
