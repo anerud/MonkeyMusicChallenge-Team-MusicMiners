@@ -1,7 +1,10 @@
 MonkeyMusicChallenge-Team-MusicMiners
 =====================================
 
-The repository for the agent used in the Monkey Music Challenge: http://www.monkeymusicchallenge.com/
+This is the repository for the agent used in the Monkey Music Challenge by our team "MusicMiners" consisting of Sebastian Ånerud and Roland Hellström Keyte.
+
+The homepage of the challenge can be found at:
+http://www.monkeymusicchallenge.com/
 
 The GitHub for the challenge can be found at: https://github.com/monkey-music-challenge/
 
@@ -35,7 +38,7 @@ Basically, tackling is the first step down the path to the dark side and should 
 
 ####Doors
 
-The agent does not handle doors yet!
+The agent does not handle doors yet! However, this can easily be done by adding an extra dimension in the state space that take on the values 0 or 1 (0/1 for the mode of the lever). Then A* will take care of that automatically!
 
 
 ####Tunnels
@@ -51,3 +54,7 @@ For all bananas _b_ on the map, check if taking a detour around banana _b_ will 
 ####Traps
 
 In the agents perspective the traps are just as a song, album or playlist but worth 1.9 points. This means that an agent prefer picking up a trap over a song but an album over a trap. The agent's inventory is also limited to 1 trap. If the agent at any point happens to have a trap in the inventory AND (is in a tight space OR beside a user) the agent will place the trap.
+
+## Contact
+
+Any questions are welcome to sebastian.anerud@gmail.com. We are happy to discuss more details about our agent and the thoughts behind our solutions to the different problems!
