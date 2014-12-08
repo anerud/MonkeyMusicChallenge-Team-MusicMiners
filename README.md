@@ -11,11 +11,12 @@ The GitHub for the challenge can be found at: https://github.com/monkey-music-ch
 
 Open up a terminal and type:
 
-git clone https://github.com/<username>/MonkeyMusicChallenge-Team-MusicMiners.git
+"git clone https://github.com/<username>/MonkeyMusicChallenge-Team-MusicMiners.git
 cd MonkeyMusicChallenge-Team-MusicMiners
 mvn package
-<more coming soon>
+java -jar target/MonkeyMusicChallenge-Team-MusicMiners.jar <your-team-name> <your-api-key> <game-id>"
 
+Want to import into Eclipse? Run mvn eclipse:eclipse and then import into Eclipse.
 ## Disclaimer
 
 The code was written under a tight time schedule and therefore the code might have a bad structure. The focus of this project was not to write beautiful code but to write an intelligent and efficient AI that runs as fast as possible.
