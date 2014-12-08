@@ -18,7 +18,7 @@ An example of less beatiful code in this project is the accessing of public fiel
 
 Agent
 -----------
-The main idea behind the agents AI is:
+The main idea behind the agent's AI is:
 
 1. Evaluate the neighbourhoods, of size 0 <= k <= #Slots left in inventory, around all items in the map in order to find the best neighbourhood. Details about this is found in "Heuristic.pdf".
 
@@ -48,7 +48,7 @@ The tunnels are connected in the A* algorithm when computed the shortest path be
 
 ####Bananas
 
-For all bananas _b_ on the map, check if taking a detour around banana _b_ will decrease the total length of your plan (eating the banana will make the agent move twice per turn). If there are bananas that shortens the plan, take a detour around the currently closest banana _b*_that shortens the plan. The agent will use a banana if there is a banana in the inventory and the agent doesn't already have the speedy buff.
+For all bananas _b_ on the map, check if taking a detour around banana _b_ will decrease the total length of your plan (eating the banana will make the agent move twice per turn). If there are bananas that shortens the plan, take a detour around the currently closest banana _b_* that shortens the plan. The agent will use a banana if there is a banana in the inventory and the agent doesn't already have the speedy buff.
 
 
 ####Traps
