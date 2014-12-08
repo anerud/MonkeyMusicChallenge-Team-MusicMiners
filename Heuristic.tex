@@ -1,0 +1,50 @@
+\documentclass[11pt]{article}
+
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[utf8]{inputenc}
+\usepackage[section]{placeins}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage[space]{grffile}
+
+\begin{document}
+
+\title{Neighbourhood Heuristic for Monkey Music Challenge}
+\author{Sebastian Ånerud (910407-5958) \\
+		anerud@student.chalmers.se}
+\date{\today}
+\maketitle
+
+\begin{flushleft}
+
+Let $m$ be the agents position, let $i$ denote an item in the set of items $I$ and $c$ be the number of items that your inventory can hold at most. Let $N_k(i)$ define the neighbourhood of size $k$ around $i$ including $i$. Also, let:
+
+\begin{align*}
+D_k(i) &= \sum\limits_{i'\in N_k(i)} d(i,i') \\
+P_k(i) &= p(i) + \sum\limits_{i'\in N_k(i)} p(i'),
+\end{align*}
+
+where $d(i,i')$ is the shortest distance between $i$ and $i'$ and $p(i)$ is the number of point that item $i$ gives. Now define the value of a user $u$ as:
+
+$$V(u) = \frac{1}{|I|} \sum\limits_{i \in I} \frac{d(u,i) + D_c(i)}{P_c(i)}$$
+
+The heuristic for the pair ($N_k(i), u$) is then defined as:
+
+\begin{align*}
+H(N_k(i),u) = \frac{d(m,i) + D_k(i) + d(i,u)}{P_k(i) + p(CI)} + V(u)
+\end{align*}
+
+were $p(CI)$ is the number of points the items in your inventory are worth. Then define:
+
+$$H_k^* = \min\limits_{i,u} H(N_k(i),u)$$
+$$H^* = \min\limits_{k} H_k^*$$
+
+Then chose the $i,u,k$ which minimizes $H^*$.
+\end{flushleft}
+\end{document}
+
